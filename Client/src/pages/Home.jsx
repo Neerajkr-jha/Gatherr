@@ -15,35 +15,36 @@ const Home = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const timeoutId = setTimeout(() => {
-      fetchEvents();
-    }, 400);
+    const fetchEvents = async () => {
+      setLoading(true);
 
-    return () => clearTimeout(timeoutId);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [search]);
+      try {
+        const { data } = await api.get("/events");
+        setEvents(Array.isArray(data) ? data : []);
+      } catch (error) {
+        console.error("Error fetching events:", error);
+        setEvents([]);
+      } finally {
+        setLoading(false);
+      }
+    };
 
-  const fetchEvents = async () => {
-    setLoading(true);
+    fetchEvents();
+  }, []);
 
-    try {
-      const { data } = await api.get(
-        `/events?search=${encodeURIComponent(search)}`
-      );
-      setEvents(data);
-    } catch (error) {
-      console.error("Error fetching events:", error);
-    } finally {
-      setLoading(false);
-    }
-  };
+  const categories = ["Hackathons", "Workshops", "Tech Talks", "College Fests"];
 
-  const categories = [
-    "Hackathons",
-    "Workshops",
-    "Tech Talks",
-    "College Fests",
-  ];
+  const filteredEvents = events.filter((event) => {
+    const query = search.trim().toLowerCase();
+    const category = String(event.category || "")
+      .trim()
+      .toLowerCase();
+
+    if (!query) return true;
+    if (!category) return false;
+
+    return category.includes(query) || query.includes(category);
+  });
 
   return (
     <div className="flex min-h-screen w-full flex-col overflow-x-clip bg-white text-gray-900 transition-colors duration-200 dark:bg-[#111318] dark:text-gray-100">
@@ -167,7 +168,8 @@ const Home = () => {
           </div>
 
           <p className="text-xs text-gray-500 min-[480px]:text-sm dark:text-gray-400">
-            {events.length} {events.length === 1 ? "event" : "events"} found
+            {filteredEvents.length}{" "}
+            {filteredEvents.length === 1 ? "event" : "events"} found
           </p>
         </div>
 
@@ -178,7 +180,7 @@ const Home = () => {
           >
             Loading events...
           </div>
-        ) : events.length === 0 ? (
+        ) : filteredEvents.length === 0 ? (
           <div className="rounded-2xl border border-gray-200 bg-gray-50 px-4 py-12 text-center min-[480px]:px-5 min-[480px]:py-16 dark:border-gray-800 dark:bg-[#1C1F26]">
             <FaCalendarAlt className="mx-auto mb-4 text-3xl text-gray-300 dark:text-gray-600" />
 
@@ -202,13 +204,13 @@ const Home = () => {
           </div>
         ) : (
           <div className="grid grid-cols-1 gap-4 min-[480px]:gap-5 sm:grid-cols-2 sm:gap-6 lg:grid-cols-3">
-            {events.map((event) => (
+            {filteredEvents.map((event) => (
               <article
                 key={event._id}
                 className="flex min-w-0 flex-col overflow-hidden rounded-2xl border border-gray-200 bg-white transition duration-300 hover:shadow-lg sm:hover:-translate-y-1 dark:border-gray-800 dark:bg-[#1C1F26] dark:hover:shadow-black/20"
               >
                 {/* Event Image */}
-                <div className="relative aspect-[16/10] w-full overflow-hidden bg-gray-100 min-[480px]:aspect-[16/9] dark:bg-[#252932]">
+                <div className="relative aspect-16/10 w-full overflow-hidden bg-gray-100 min-[480px]:aspect-[16/9] dark:bg-[#252932]">
                   {event.image ? (
                     <img
                       src={event.image}
@@ -223,26 +225,24 @@ const Home = () => {
                   )}
 
                   <div className="absolute right-2 top-2 max-w-[calc(100%-1rem)] rounded-full bg-white px-3 py-1.5 text-sm font-semibold text-gray-900 shadow-sm min-[480px]:right-3 min-[480px]:top-3 dark:bg-[#111318] dark:text-white">
-                    {event.ticketPrice === 0
-                      ? "Free"
-                      : `₹${event.ticketPrice}`}
+                    {event.ticketPrice === 0 ? "Free" : `₹${event.ticketPrice}`}
                   </div>
                 </div>
 
                 {/* Event Details */}
                 <div className="flex min-w-0 flex-1 flex-col p-4 min-[480px]:p-5">
-                  <p className="mb-2 break-words text-xs font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-400">
+                  <p className="mb-2 wrap-break-word text-xs font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-400">
                     {event.category || "Event"}
                   </p>
 
-                  <h3 className="mb-4 break-words text-lg font-bold leading-snug text-gray-900 min-[480px]:text-xl dark:text-white">
+                  <h3 className="mb-4 wrap-break-word text-lg font-bold leading-snug text-gray-900 min-[480px]:text-xl dark:text-white">
                     {event.title}
                   </h3>
 
                   <div className="mb-5 space-y-3 text-sm text-gray-500 dark:text-gray-400">
                     <div className="flex min-w-0 items-start gap-3">
                       <FaCalendarAlt className="mt-0.5 shrink-0 text-gray-400 dark:text-gray-500" />
-                      <span className="min-w-0 break-words">
+                      <span className="min-w-0 wrap-break-word">
                         {new Date(event.date).toLocaleDateString(undefined, {
                           day: "numeric",
                           month: "short",
@@ -253,14 +253,14 @@ const Home = () => {
 
                     <div className="flex min-w-0 items-start gap-3">
                       <FaMapMarkerAlt className="mt-0.5 shrink-0 text-gray-400 dark:text-gray-500" />
-                      <span className="min-w-0 break-words">
+                      <span className="min-w-0 wrap-break-word">
                         {event.location}
                       </span>
                     </div>
                   </div>
 
                   <div className="mt-auto border-t border-gray-100 pt-4 dark:border-gray-800">
-                    <p className="mb-4 break-words text-xs leading-5 text-gray-500 dark:text-gray-400">
+                    <p className="mb-4 wrap-break-word text-xs leading-5 text-gray-500 dark:text-gray-400">
                       {Number(event.totalSeats) > 0
                         ? `${event.availableSeats} of ${event.totalSeats} seats remaining`
                         : "View event for details"}
