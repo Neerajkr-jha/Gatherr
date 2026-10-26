@@ -282,23 +282,83 @@ const Home = () => {
       </main>
 
       {/* Footer */}
-      <footer className="border-t border-gray-200 bg-white transition-colors duration-200 dark:border-gray-800 dark:bg-[#111318]">
-        <div className="mx-auto flex w-full max-w-7xl flex-col items-center justify-between gap-3 px-4 py-6 min-[480px]:gap-4 min-[480px]:px-5 min-[480px]:py-7 sm:flex-row sm:px-8 lg:px-10">
-          <Link
-            to="/"
-            className="flex items-center gap-2 text-lg font-bold tracking-tight text-gray-900 dark:text-white"
-          >
-            <FaTicketAlt />
-            Gatherr
-          </Link>
 
-          <p className="text-center text-xs leading-5 text-gray-500 min-[480px]:text-sm dark:text-gray-400">
-            Discover events. Find your people. Make memories.
-          </p>
+      <footer className="relative mx-3 mb-3 mt-12 overflow-hidden rounded-3xl border border-gray-200/80 bg-gradient-to-br from-gray-50 via-white to-gray-100 transition-colors duration-300 min-[480px]:mx-5 sm:mx-6 lg:mx-10 dark:border-white/[0.08] dark:from-[#1b1e25] dark:via-[#15171d] dark:to-[#111318]">
+        {/* Soft decorative glow */}
+        <div className="pointer-events-none absolute -right-20 -top-24 h-56 w-56 rounded-full bg-gray-200/50 blur-3xl dark:bg-white/[0.04]" />
+        <div className="pointer-events-none absolute -bottom-24 -left-16 h-48 w-48 rounded-full bg-gray-100 blur-3xl dark:bg-white/[0.03]" />
 
-          <p className="text-xs text-gray-400 dark:text-gray-500">
-            © {new Date().getFullYear()} Gatherr
-          </p>
+        <div className="relative mx-auto w-full max-w-7xl px-5 py-8 min-[480px]:px-7 min-[480px]:py-10 sm:px-10">
+          {/* Main footer content */}
+          <div className="flex flex-col gap-8 sm:flex-row sm:items-start sm:justify-between">
+            {/* Brand */}
+            <div className="max-w-sm">
+              <Link
+                to="/"
+                className="group inline-flex items-center gap-3"
+                aria-label="Gatherr home"
+              >
+                <span className="flex h-11 w-11 items-center justify-center rounded-2xl bg-gray-950 text-white shadow-lg transition duration-300 group-hover:rotate-[-5deg] group-hover:scale-105 dark:bg-white dark:text-gray-950">
+                  <FaTicketAlt className="text-lg" />
+                </span>
+
+                <span className="text-2xl font-bold tracking-tight text-gray-950 dark:text-white">
+                  Gatherr<span className="text-gray-400">.</span>
+                </span>
+              </Link>
+
+              <p className="mt-4 max-w-xs text-sm leading-6 text-gray-600 dark:text-gray-400">
+                Discover events. Find your people. Make memories that last.
+              </p>
+            </div>
+
+            {/* Quick links */}
+            <div className="flex flex-col gap-3">
+              <h3 className="text-xs font-bold uppercase tracking-[0.16em] text-gray-400 dark:text-gray-500">
+                Explore
+              </h3>
+
+              <Link
+                to="/"
+                className="w-fit text-sm text-gray-600 transition hover:translate-x-1 hover:text-gray-950 dark:text-gray-300 dark:hover:text-white"
+              >
+                Discover Events
+              </Link>
+
+            </div>
+
+            {/* Call to action */}
+            <div className="max-w-xs rounded-2xl border border-gray-200/80 bg-white/60 p-4 shadow-sm backdrop-blur-xl dark:border-white/[0.08] dark:bg-white/[0.03]">
+              <p className="text-sm font-semibold text-gray-900 dark:text-white">
+                Your next experience awaits.
+              </p>
+
+              <p className="mt-1 text-xs leading-5 text-gray-500 dark:text-gray-400">
+                Find an event and make it memorable.
+              </p>
+
+              <Link
+                to="/"
+                className="mt-4 inline-flex min-h-10 items-center gap-2 rounded-full bg-gray-950 px-4 py-2 text-xs font-semibold text-white transition hover:bg-gray-700 dark:bg-white dark:text-gray-950 dark:hover:bg-gray-200"
+              >
+                Explore Events
+                <FaArrowRight className="text-[10px]" />
+              </Link>
+            </div>
+          </div>
+
+          {/* Bottom bar */}
+          <div className="mt-8 flex flex-col items-center justify-between gap-3 border-t border-gray-200/80 pt-5 min-[480px]:mt-10 min-[480px]:pt-6 sm:flex-row dark:border-white/[0.08]">
+            <p className="text-center text-xs leading-5 text-gray-500 dark:text-gray-400">
+              © {new Date().getFullYear()} Gatherr. All rights reserved.
+            </p>
+
+            <p
+              className="text-xs font-medium text-gray-500 transition hover:text-gray-950 dark:text-gray-400 dark:hover:text-white"
+            >
+              Discover something great
+            </p>
+          </div>
         </div>
       </footer>
     </div>
