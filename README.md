@@ -1,4 +1,3 @@
-![CI](https://github.com/Neerajkr-jha/Gatherr/actions/workflows/backend-ci.yml/badge.svg)
 # Gatherr – College Event Management System
 
 Gatherr is a full-stack college campus event management platform that brings students, event organizers, and administrators together in one place. It enables students to discover college events, book tickets, and manage their bookings, while administrators can organize events and manage registrations.
