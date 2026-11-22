@@ -1,0 +1,35 @@
+name: Gatherr Backend CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  test:
+    name: Run Backend Tests
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: Server
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: Server/package-lock.json
+
+      - name: Install Dependencies
+        run: npm ci
+
+      - name: Run Tests
+        run: npm test
+        env:
+          JWT_SECRET: test_secret
